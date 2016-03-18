@@ -147,7 +147,16 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        
+        /*
+         * OAuth2 Providers 
+         */
+        LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider::class,
+        LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider::class,
 
+        /*
+         * Prettus Repository Providers 
+         */
         Prettus\Repository\Providers\RepositoryServiceProvider::class,
         
         /*
@@ -204,6 +213,10 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        /*
+         * OAuth2 Aliazes
+         */
+        'Authorizer' => LucaDegasperi\OAuth2Server\Facades\Authorizer::class,
 
     ],
 

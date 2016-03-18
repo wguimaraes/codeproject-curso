@@ -28,11 +28,21 @@ Route::group(['middleware' => ['web']], function () {
         return view('welcome');
     });
     
+    Route::get('oauth/access_token', function(){
+        return Response::json(Authorizer::issueAccessToken());
+    });
+    
     Route::get('client', 'ClientController@index');
     Route::post('client', 'ClientController@store');
     Route::get('client/{id}', 'ClientController@show');
     Route::delete('client/{id}', 'ClientController@destroy');
     Route::put('client/{id}', 'ClientController@update');
+    
+    Route::get('project/{id}/notes', 'ProjectNoteController@index');
+    Route::post('project/{id}/notes', 'ProjectNoteController@store');
+    Route::get('project/{id}/notes/{noteId}', 'ProjectNoteController@show');
+    Route::put('project/{id}/notes/{noteId}', 'ProjectNoteController@update');
+    Route::delete('project/{id}/notes/{noteId}', 'ProjectNoteController@destroy');
     
     Route::get('project', 'ProjectController@index');
     Route::post('project', 'ProjectController@store');
