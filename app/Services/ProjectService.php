@@ -11,6 +11,9 @@ namespace CodeProject\Services;
 use \CodeProject\Repositories\ProjectRepository;
 use \CodeProject\Validators\ProjectValidator;
 use \Prettus\Validator\Exceptions\ValidatorException;
+use \Illuminate\Database\Eloquent\ModelNotFoundException;
+use \Illuminate\Database\QueryException;
+use \Illuminate\Http\Exception;
 
 /**
  * Description of ProjectService
@@ -29,16 +32,26 @@ class ProjectService {
         $this->validator = $validator;
     }
     
+    public function find($id){
+        try{
+            return $this->repository->with(['client', 'user'])->find($id);
+        }catch(ModelNotFoundException $e){
+            return ['error' => true, 'message' => 'Project not found.'];
+        }catch(Exception $e){
+            return ['error' => true, 'message' => 'An error occurred on searching project ' . $id . '.'];
+        }
+    }
+    
     public function create(array $data){
-        
         try{
             $this->validator->with($data)->passesOrFail();
             return $this->repository->create($data);
         }catch(ValidatorException $e){
-            return [
-                'error' => true,
-                'message' => $e->getMessageBag()
-            ];
+            return ['error' => true, 'message' => $e->getMessageBag()];
+        }catch(QueryException $e){
+            return ['error' => true, 'message' => 'Dependency fields have invalid values for project'];
+        }catch(Exception $e){
+            return ['error' => true, 'message' => 'Error on create project.'];
         }
         
     }
@@ -53,19 +66,25 @@ class ProjectService {
                 'error' => true,
                 'message' => $e->getMessageBag()
             ];
+        }catch(QueryException $e){
+            return ['error' => true, 'message' => 'Dependency fields have invalid values for project ' . $id . ''];
+        }catch(ModelNotFoundException $e){
+            return ['error' => true, 'message' => 'Project ' . $id . ' not found.'];
+        }catch(Exception $e){
+            return ['error' => true, 'message' => 'An error occurred while updating project.'];
         }
     }
     
     public function destroy($id){
-        if($this->repository->delete($id)){
-            return [
-                'message' => 'Project ' . $id . ' has ben deleted.'
-                ];
-        }else{
-            return [
-                'error' => true,
-                'message' => 'Error on delete project ' . $id . '.'
-            ];
+        try{
+            $this->repository->delete($id);
+            return ['message' => 'Project ' . $id . ' has ben deleted.'];
+        }catch(QueryException $e){
+            return ['error' => true, 'message' => 'Project ' . $id . ' can\'t be deleted because has registry dependences'];
+        }catch(ModelNotFoundException $e){
+            return ['error' => true, 'message' => 'Project id: ' . $id . ' not found.'];
+        }catch(Exception $e){
+            return ['error' => true, 'message' => 'Error on delete project ' . $id . '.'];
         }
     }
     

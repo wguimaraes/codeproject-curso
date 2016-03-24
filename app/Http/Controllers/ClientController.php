@@ -23,11 +23,12 @@ class ClientController extends Controller
     }
     
     public function store(Request $request){
+        dd($request);
         return $this->service->create($request->all());
     }
     
     public function show($id){
-        return $this->repository->find($id);
+        return $this->service->find($id);
     }
     
     public function destroy($id){

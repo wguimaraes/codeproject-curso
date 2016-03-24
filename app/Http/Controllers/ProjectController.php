@@ -27,7 +27,7 @@ class ProjectController extends Controller
     }
     
     public function show($id){
-        return $this->repository->with(['client', 'user'])->find($id);
+        return $this->service->find($id);
     }
     
     public function destroy($id){
