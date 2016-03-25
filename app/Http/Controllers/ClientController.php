@@ -23,7 +23,6 @@ class ClientController extends Controller
     }
     
     public function store(Request $request){
-        dd($request);
         return $this->service->create($request->all());
     }
     
