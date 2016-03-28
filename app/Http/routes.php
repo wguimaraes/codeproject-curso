@@ -32,22 +32,52 @@ Route::group(['middleware' => ['web']], function () {
         return Response::json(Authorizer::issueAccessToken());
     });
     
-    Route::get('client', 'ClientController@index');
-    Route::post('client', 'ClientController@store');
-    Route::get('client/{id}', 'ClientController@show');
-    Route::delete('client/{id}', 'ClientController@destroy');
-    Route::put('client/{id}', 'ClientController@update');
-    
-    Route::get('project/{id}/notes', 'ProjectNoteController@index');
-    Route::post('project/{id}/notes', 'ProjectNoteController@store');
-    Route::get('project/{id}/notes/{noteId}', 'ProjectNoteController@show');
-    Route::put('project/{id}/notes/{noteId}', 'ProjectNoteController@update');
-    Route::delete('project/{id}/notes/{noteId}', 'ProjectNoteController@destroy');
-    
-    Route::get('project', 'ProjectController@index');
-    Route::post('project', 'ProjectController@store');
-    Route::get('project/{id}', 'ProjectController@show');
-    Route::delete('project/{id}', 'ProjectController@destroy');
-    Route::put('project/{id}', 'ProjectController@update');
+    Route::group(['middleware' => 'oauth'], function(){
+        
+        Route::resource('client', 'ClientController', ['except' => ['create', 'edit']]);
+        /*
+         * O método Route::resource() equivale a agrupar todas as rotas do controller informado e 
+         * permitir que essas executem métodos de get post, delete, update, etc..
+         * Funções de formulário que não estamos utilziando (create e edit), estão sendo excluídas 
+         * das requisições por não existirem em nosso controller
+         */
+//        Route::get('client', ['middleware' => 'oauth', 'uses' => 'ClientController@index']);
+//        Route::post('client', 'ClientController@store');
+//        Route::get('client/{id}', 'ClientController@show');
+//        Route::delete('client/{id}', 'ClientController@destroy');
+//        Route::put('client/{id}', 'ClientController@update');
+
+        Route::resource('project', 'ProjectController', ['except' => ['create', 'edit']]);
+        
+        Route::group(['prefix' => 'project'], function(){     
+            Route::get('{id}/notes', 'ProjectNoteController@index');
+            Route::post('{id}/notes', 'ProjectNoteController@store');
+            Route::get('{id}/notes/{noteId}', 'ProjectNoteController@show');
+            Route::put('{id}/notes/{noteId}', 'ProjectNoteController@update');
+            Route::delete('{id}/notes/{noteId}', 'ProjectNoteController@destroy');
+            
+            Route::get('{id}/tasks', 'ProjectTaskController@index');
+            Route::post('{id}/tasks', 'ProjectTaskController@store');
+            Route::get('{id}/tasks/{taskId}', 'ProjectTaskController@show');
+            Route::put('{id}/tasks/{taskId}', 'ProjectTaskController@update');
+            Route::delete('{id}/tasks/{taskId}', 'ProjectTaskController@destroy');
+            
+            Route::get('{id}/members', 'ProjectController@findMembers');
+            Route::post('{id}/members', 'ProjectController@addMember');
+            
+            Route::post('{id}/file', 'ProjectFileController@store');
+        });
+//        Route::get('project/{id}/notes', 'ProjectNoteController@index');
+//        Route::post('project/{id}/notes', 'ProjectNoteController@store');
+//        Route::get('project/{id}/notes/{noteId}', 'ProjectNoteController@show');
+//        Route::put('project/{id}/notes/{noteId}', 'ProjectNoteController@update');
+//        Route::delete('project/{id}/notes/{noteId}', 'ProjectNoteController@destroy');
+
+//        Route::get('project', 'ProjectController@index');
+//        Route::post('project', 'ProjectController@store');
+//        Route::get('project/{id}', 'ProjectController@show');
+//        Route::delete('project/{id}', 'ProjectController@destroy');
+//        Route::put('project/{id}', 'ProjectController@update'); 
+    });
     
 });

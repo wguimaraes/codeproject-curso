@@ -8,8 +8,8 @@
 
 namespace CodeProject\Services;
 
-use \CodeProject\Repositories\ProjectNoteRepository;
-use \CodeProject\Validators\ProjectNoteValidator;
+use \CodeProject\Repositories\ProjectTaskRepository;
+use \CodeProject\Validators\ProjectTaskValidator;
 use \Prettus\Validator\Exceptions\ValidatorException;
 use \Illuminate\Database\Eloquent\ModelNotFoundException;
 use \Illuminate\Database\QueryException;
@@ -20,14 +20,14 @@ use \Illuminate\Http\Exception;
  *
  * @author William
  */
-class ProjectNoteService {
+class ProjectTaskService {
     
     protected $repository;
     
     protected $validator;
 
 
-    public function __construct(ProjectNoteRepository $repository, ProjectNoteValidator $validator) {
+    public function __construct(ProjectTaskRepository $repository, ProjectTaskValidator $validator) {
         $this->repository = $repository;
         $this->validator = $validator;
     }
@@ -38,10 +38,10 @@ class ProjectNoteService {
             if(sizeof($projectNote) > 0){
                 return $projectNote;
             }else{
-                return ['error' => true, 'message' => 'Project note ' . $noteId . ' not found.'];
+                return ['error' => true, 'message' => 'Project task ' . $noteId . ' not found.'];
             }
         }catch(ModelNotFoundException $e){
-            return ['error' => true, 'message' => 'Project note not ' . $noteId . ' found.'];
+            return ['error' => true, 'message' => 'Project task not ' . $noteId . ' found.'];
         }catch(Exception $e){
             return ['error' => true, 'message' => 'An error occurred on searching project ' . $noteId . ' .'];
         }
@@ -55,9 +55,9 @@ class ProjectNoteService {
         }catch(ValidatorException $e){
             return ['error' => true, 'message' => $e->getMessageBag()];
         }catch(QueryException $e){
-            return ['error' => true, 'message' => 'Dependency fields have invalid values for project note'];
+            return ['error' => true, 'message' => 'Dependency fields have invalid values for project task'];
         }catch(Exception $e){
-            return ['error' => true, 'message' => 'Error on create project note.'];
+            return ['error' => true, 'message' => 'Error on create project task.'];
         }
         
     }
@@ -70,24 +70,24 @@ class ProjectNoteService {
         }catch(ValidatorException $e){
             return ['error' => true, 'message' => $e->getMessageBag()];
         }catch(QueryException $e){
-            return ['error' => true, 'message' => 'Dependency fields have invalid values for project note ' . $id . ''];
+            return ['error' => true, 'message' => 'Dependency fields have invalid values for project task ' . $id . ''];
         }catch(ModelNotFoundException $e){
-            return ['error' => true, 'message' => 'Project note not ' . $id . ' found.'];
+            return ['error' => true, 'message' => 'Project task ' . $id . ' not found.'];
         }catch(Exception $e){
-            return ['error' => true, 'message' => 'An error occurred while updating project note.'];
+            return ['error' => true, 'message' => 'An error occurred while updating project task.'];
         }
     }
     
     public function destroy($id){
         try{
             $this->repository->delete($id);
-            return ['message' => 'Project note ' . $id . ' has ben deleted.'];
+            return ['message' => 'Project task ' . $id . ' has ben deleted.'];
         }catch(QueryException $e){
-            return ['error' => true, 'message' => 'Project note ' . $id . ' can\'t be deleted because the query has errors'];
+            return ['error' => true, 'message' => 'Project task ' . $id . ' can\'t be deleted because the query has errors'];
         }catch(ModelNotFoundException $e){
-            return ['error' => true, 'message' => 'Project note id: ' . $id . ' not found.'];
+            return ['error' => true, 'message' => 'Project task id: ' . $id . ' not found.'];
         }catch(Exception $e){
-            return ['error' => true, 'message' => 'Error on delete project note ' . $id . '.'];
+            return ['error' => true, 'message' => 'Error on delete project task ' . $id . '.'];
         }
     }
     

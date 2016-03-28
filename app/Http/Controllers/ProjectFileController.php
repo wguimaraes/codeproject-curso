@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use \CodeProject\Repositories\ProjectRepository;
 use CodeProject\Services\ProjectService;
 
-class ProjectController extends Controller
+class ProjectFileController extends Controller
 {
     
     private $repository;
@@ -40,7 +40,13 @@ class ProjectController extends Controller
     }
     
     public function store(Request $request){
-        return $this->service->create($request->all());
+        $file = $request->file('file');
+        $data['name'] = $request->name;
+        $data['description'] = $request->description;
+        $data['project_id'] = $request->project_id;
+        $data['extension'] = $file->getClientOriginalExtension();
+        $data['file'] = $file;
+        $this->service->createFile($data);
     }
     
     public function show($id){
@@ -62,13 +68,5 @@ class ProjectController extends Controller
             return ['error' => true, 'message' => 'Access forbidden'];
         }
         return $this->service->update($request->all(), $id);
-    }
-    
-    public function findMembers($id){
-        return $this->service->findMembers($id);
-    }
-    
-    public function addMember(Request $request){
-        return $this->service->addMember($request->all());
     }
 }

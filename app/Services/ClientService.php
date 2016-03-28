@@ -36,7 +36,7 @@ class ClientService {
         try{
             return $this->repository->find($id);
         }catch(ModelNotFoundException $e){
-            return ['error' => true, 'message' => 'Client not found.'];
+            return ['error' => true, 'message' => 'Client ' . $id . ' not found.'];
         }catch(Exception $e){
             return ['error' => true, 'message' => 'An error occurred on searching client ' . $id . '.'];
         }

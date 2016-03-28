@@ -50,3 +50,12 @@ $factory->define(CodeProject\Entities\ProjectNote::class, function (Faker\Genera
         'content' => $faker->sentence,
     ];
 });
+$factory->define(CodeProject\Entities\ProjectTask::class, function (Faker\Generator $faker) {
+    return [
+        'project_id' => rand(1, 10),
+        'name' => $faker->word,
+        'start_date' => $faker->dateTime('now'),
+        'due_date' => $faker->dateTime('now'),
+        'status' => rand(1,3),
+    ];
+});
