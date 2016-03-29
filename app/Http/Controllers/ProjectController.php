@@ -68,7 +68,11 @@ class ProjectController extends Controller
         return $this->service->findMembers($id);
     }
     
-    public function addMember(Request $request){
-        return $this->service->addMember($request->all());
+    public function addMember($id, $memberId){
+        return $this->service->addMember($id, $memberId);
+    }
+    
+    public function removeMember($id, $memberId){
+        return $this->service->removeMember($id, $memberId);
     }
 }

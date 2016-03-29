@@ -15,8 +15,6 @@ use \Illuminate\Database\Eloquent\ModelNotFoundException;
 use \Illuminate\Database\QueryException;
 use \Illuminate\Http\Exception;
 
-use \CodeProject\Entities\ProjectMember;
-
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 
@@ -111,44 +109,49 @@ class ProjectService {
     }
     
     public function findMembers($projectId){
+        $project = $this->repository->skipPresenter()->find($projectId);
+        return $project->members;
+    }
+    
+    public function addMember($projectId, $memberId){
         try{
             $project = $this->repository->skipPresenter()->find($projectId);
-            if($project){
-                return $project->members;
+            if(!$this->isMember($projectId, $memberId)){
+                $project->members()->attach($memberId);
+                return ['message' => 'Member ' . $memberId . ' has added to project ' . $projectId . '.'];
             }else{
-                return ['error' => true, 'message' => 'Project ' . $projectId . ' not found.'];
+                return ['error' => true, 'message' => 'Member ' . $memberId . ' already related to project ' . $projectId . '.'];
             }
         }catch(QueryException $e){
-            return ['error' => true, 'message' => 'An error occurred on search members of project ' . $projectId . '.'];
+            return ['error' => true, 'message' => 'An error occurred on add member ' . $memberId . ' to project ' . $projectId . '.'];
         }catch(ModelNotFoundException $e){
             return ['error' => true, 'message' => 'Project id: ' . $projectId . ' not found.'];
         }catch(Exception $e){
-            return ['error' => true, 'message' => 'Error on find members of project ' . $projectId   . '.'];
-        }
-    }
-    
-    public function addMember(array $data){
-        try{
-            $project = $this->repository->skipPresenter()->find($data['project_id']);
-            if($project){
-                return $project->members()->create($data);
-                $projectMember = new ProjectMember();
-                return $projectMember->create($data);
-            }else{
-                return ['error' => true, 'message' => 'Project ' . $data['project_id'] . ' not found.'];
-            }
-        }catch(QueryException $e){
-            return ['error' => true, 'message' => 'An error occurred on add member to project ' . $data['project_id'] . '.'];
-            return ['error' => true, 'message' => $e];
-        }catch(ModelNotFoundException $e){
-            return ['error' => true, 'message' => 'Project id: ' . $data['project_id'] . ' not found.'];
-        }catch(Exception $e){
-            return ['error' => true, 'message' => 'Error on add members to project ' . $data['project_id'] . '.'];
+            return ['error' => true, 'message' => 'Error on add members to project ' . $projectId . '.'];
         }
     }
     
     public function removeMember($projectId, $memberId){
-        
+        try{
+            $project = $this->repository->skipPresenter()->find($projectId);
+            if($this->isMember($projectId, $memberId)){
+                $project->members()->detach($memberId);
+                return ['message' => 'Member ' . $memberId . ' is removed to project ' . $projectId . '.'];
+            }else{
+                return ['error' => true, 'message' => 'Member ' . $memberId . ' not found in project ' . $projectId . '.'];
+            }
+        }catch(QueryException $e){
+            return ['error' => true, 'message' => 'An error occurred on add member ' . $memberId . ' to project ' . $projectId . '.'];
+        }catch(ModelNotFoundException $e){
+            return ['error' => true, 'message' => 'Project id: ' . $projectId . ' not found.'];
+        }catch(Exception $e){
+            return ['error' => true, 'message' => 'Error on add members to project ' . $projectId . '.'];
+        }
+    }
+    
+    private function isMember($projectId, $memberId){
+        $project = $this->repository->skipPresenter()->find($projectId);
+        return $project->members->find($memberId);
     }
     
 }

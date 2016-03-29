@@ -63,7 +63,8 @@ Route::group(['middleware' => ['web']], function () {
             Route::delete('{id}/tasks/{taskId}', 'ProjectTaskController@destroy');
             
             Route::get('{id}/members', 'ProjectController@findMembers');
-            Route::post('{id}/members', 'ProjectController@addMember');
+            Route::post('{id}/members/{memberId}', 'ProjectController@addMember');
+            Route::delete('{id}/members/{memberId}', 'ProjectController@removeMember');
             
             Route::post('{id}/file', 'ProjectFileController@store');
         });
