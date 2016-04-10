@@ -10,6 +10,7 @@ namespace CodeProject\Repositories;
 
 use CodeProject\Entities\Client;
 use Prettus\Repository\Eloquent\BaseRepository;
+use \CodeProject\Presenters\ClientPresenter;
 
 /**
  * Description of ClientRepositoryEloquent
@@ -20,6 +21,10 @@ class ClientRepositoryEloquent extends BaseRepository implements ClientRepositor
     
     public function model(){
         return Client::class;
+    }
+
+    public function presenter(){
+        return ClientPresenter::class;
     }
     
 }

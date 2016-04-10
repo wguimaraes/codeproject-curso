@@ -108,6 +108,30 @@ class ProjectService {
         }
     }
     
+    public function deleteFile($projectId, $fileId){
+        try{
+            $project = $this->repository->skipPresenter()->find($projectId);
+            if($project){
+                $projectFile = $project->files()->find($fileId);
+                if($projectFile){
+                    $this->storage->delete($projectFile->name . '.' . $projectFile->extension);
+                    $project->files()->delete($fileId);
+                    return ['message' => 'File ' . $projectFile->name . '.' . $projectFile->extension . ' was deleted!'];
+                }else{
+                    return ['error' => true, 'message' => 'File ' . $fileId . ' not found in project ' . $projectId];
+                }
+            }else{
+                return ['error' => true, 'message' => 'Project' . $projectId . ' not found'];
+            }
+        }catch(QueryException $e){
+            return ['error' => true, 'message' => 'An error occurred on delete file.'];
+        }catch(ModelNotFoundException $e){
+            return ['error' => true, 'message' => 'Project id: ' . $projectId . ' not found.'];
+        }catch(Exception $e){
+            return ['error' => true, 'message' => 'Error on delete file to project ' . $projectId . '.'];
+        }
+    }
+    
     public function findMembers($projectId){
         $project = $this->repository->skipPresenter()->find($projectId);
         return $project->members;

@@ -30,6 +30,8 @@ class ProjectTransformer extends TransformerAbstract {
             'progress' => $project->progress,
             'status' => $project->status,
             'due_date' => $project->due_date,
+            'create_at' => $project->create_at,
+            'update_at' => $project->update_at,
         ];
     }
     

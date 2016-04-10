@@ -22,6 +22,9 @@ class ProjectMembersTransformer extends TransformerAbstract {
         return[
             'member_id' => $user->id,
             'member_name' => $user->name,
+            'member_email' => $user->email,
+            'create_at' => $user->create_at,
+            'update_at' => $user->update_at,
         ];
     }
     

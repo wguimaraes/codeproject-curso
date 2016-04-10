@@ -41,12 +41,16 @@ class ProjectFileController extends Controller
     
     public function store(Request $request){
         $file = $request->file('file');
-        $data['name'] = $request->name;
-        $data['description'] = $request->description;
-        $data['project_id'] = $request->project_id;
-        $data['extension'] = $file->getClientOriginalExtension();
-        $data['file'] = $file;
-        $this->service->createFile($data);
+        if($file){
+            $data['name'] = $request->project_id . '_' . $request->name;
+            $data['description'] = $request->description;
+            $data['project_id'] = $request->project_id;
+            $data['extension'] = $file->getClientOriginalExtension();
+            $data['file'] = $file;
+            return $this->service->createFile($data);
+        }else{
+            return ['error' => true, 'message' => 'No file to storage.'];
+        }
     }
     
     public function show($id){
@@ -56,17 +60,10 @@ class ProjectFileController extends Controller
         return $this->service->find($id);
     }
     
-    public function destroy($id){
-        if(!$this->checkOwnerId($id)){
+    public function destroy($projectId, $fileId){
+        if(!$this->checkOwnerId($projectId)){
             return ['error' => true, 'message' => 'Access forbidden'];
         }
-        return $this->service->destroy($id);
-    }
-    
-    public function update(Request $request, $id){
-        if(!$this->checkOwnerId($id)){
-            return ['error' => true, 'message' => 'Access forbidden'];
-        }
-        return $this->service->update($request->all(), $id);
+        return $this->service->deleteFile($projectId, $fileId);
     }
 }

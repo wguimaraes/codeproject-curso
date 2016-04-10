@@ -67,6 +67,7 @@ Route::group(['middleware' => ['web']], function () {
             Route::delete('{id}/members/{memberId}', 'ProjectController@removeMember');
             
             Route::post('{id}/file', 'ProjectFileController@store');
+            Route::delete('{id}/file/{fileId}', 'ProjectFileController@destroy');
         });
 //        Route::get('project/{id}/notes', 'ProjectNoteController@index');
 //        Route::post('project/{id}/notes', 'ProjectNoteController@store');
