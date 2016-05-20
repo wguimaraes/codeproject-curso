@@ -1,0 +1,28 @@
+{
+  "name": "codeproject-curso",
+  "description": "Front end de gerenciamentos de projetos",
+  "main": "",
+  "authors": [
+    "willian.fguim@gmail.com"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "resources/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.5.5",
+    "angular-route": "^1.5.5",
+    "angular-resource": "^1.5.5",
+    "angular-animate": "^1.5.5",
+    "angular-messages": "^1.5.5",
+    "angular-bootstrap": "^1.3.2",
+    "angular-strap": "^2.3.8",
+    "bootstrap": "^3.3.6"
+  }
+}
