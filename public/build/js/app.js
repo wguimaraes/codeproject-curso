@@ -16,9 +16,20 @@ app.provider('appConfig', function(){
 	}
 })
 
-app.config(['$routeProvider', 'OAuthProvider', 'OAuthTokenProvider', 'appConfigProvider', 
-            function($routeProvider, OAuthProvider, OAuthTokenProvider, appConfigProvider){
-    $routeProvider
+app.config(['$routeProvider', '$httpProvider', 'OAuthProvider', 'OAuthTokenProvider', 'appConfigProvider', 
+            function($routeProvider, $httpProvider, OAuthProvider, OAuthTokenProvider, appConfigProvider){
+		$httpProvider.defaults.transformResponse = function(data, headers){
+			var headersGetter = headers();
+			if(headersGetter['content-type'] == 'application/json' || headersGetter['content-type'] == 'text/json'){
+				var dataJson = JSON.parse(data);
+				if(dataJson.hasOwnProperty('data')){
+					dataJson = dataJson.data;
+				}
+				return dataJson;
+			}
+			return data;
+		};
+    	$routeProvider
             .when('/login', {
                 templateUrl: 'build/views/login.html',
                 controller: 'LoginController'
@@ -27,21 +38,41 @@ app.config(['$routeProvider', 'OAuthProvider', 'OAuthTokenProvider', 'appConfigP
                 templateUrl: 'build/views/home.html',
                 controller: 'HomeController'
             })
-            .when('/client', {
+            .when('/clients', {
                 templateUrl: 'build/views/clients/list.html',
                 controller: 'ClientListController'
             })
-            .when('/client/new', {
+            .when('/clients/new', {
                 templateUrl: 'build/views/clients/new.html',
                 controller: 'ClientNewController'
             })
-            .when('/client/:id/edit', {
+            .when('/clients/:id/edit', {
                 templateUrl: 'build/views/clients/edit.html',
                 controller: 'ClientEditController'
             })
-            .when('/client/:id/remove', {
+            .when('/clients/:id/remove', {
                 templateUrl: 'build/views/clients/remove.html',
                 controller: 'ClientRemoveController'
+            })
+            .when('/project/:id/notes', {
+                templateUrl: 'build/views/projects/notes/list.html',
+                controller: 'ProjectNotesController'
+            })
+            .when('/project/:id/notes/show/:idNote', {
+                templateUrl: 'build/views/projects/notes/show.html',
+                controller: 'ProjectNotesShowController'
+            })
+            .when('/project/:id/notes/new', {
+                templateUrl: 'build/views/projects/notes/new.html',
+                controller: 'ProjectNotesController'
+            })
+            .when('/project/:id/notes/:idNote/edit', {
+                templateUrl: 'build/views/projects/notes/edit.html',
+                controller: 'ProjectNotesController'
+            })
+            .when('/project/:id/notes/:idNote/remove/', {
+                templateUrl: 'build/views/projects/notes/remove.html',
+                controller: 'ProjectNotesController'
             });
     OAuthProvider.configure({
         baseUrl: appConfigProvider.config.baseUrl,

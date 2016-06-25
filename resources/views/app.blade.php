@@ -9,8 +9,10 @@
     
     <!-- Styles -->
     @if(Config::get('app.debug'))
-        <link href="{{asset('build/css/vendor/bootstrap.min.css')}}" rel="stylesheet" />
-        <link href="{{asset('build/css/vendor/bootstrap-theme.min.css')}}" rel="stylesheet" />
+        <link href="{{asset('build/css/app.css')}}" rel="stylesheet" />
+        <link href="{{asset('build/css/components.css')}}" rel="stylesheet" />
+        <link href="{{asset('build/css/flaticon.css')}}" rel="stylesheet" />
+        <link href="{{asset('build/css/font-awesome.css')}}" rel="stylesheet" />
     @else
         <link href="{{elixir('css/all.css')}}" rel="stylesheet" />
     @endif
@@ -93,10 +95,16 @@
         <!-- CONTROLLER'S -->
         <script type="text/javascript" src="{{asset('build/js/controllers/login.js')}}"></script>
         <script type="text/javascript" src="{{asset('build/js/controllers/home.js')}}"></script>
-        <script type="text/javascript" src="{{asset('build/js/controllers/clientList.js')}}"></script>
-        <script type="text/javascript" src="{{asset('build/js/controllers/clientNew.js')}}"></script>
-        <script type="text/javascript" src="{{asset('build/js/controllers/clientEdit.js')}}"></script>
-        <script type="text/javascript" src="{{asset('build/js/controllers/clientRemove.js')}}"></script>
+        <script type="text/javascript" src="{{asset('build/js/controllers/client/clientList.js')}}"></script>
+        <script type="text/javascript" src="{{asset('build/js/controllers/client/clientNew.js')}}"></script>
+        <script type="text/javascript" src="{{asset('build/js/controllers/client/clientEdit.js')}}"></script>
+        <script type="text/javascript" src="{{asset('build/js/controllers/client/clientRemove.js')}}"></script>
+        
+        <script type="text/javascript" src="{{asset('build/js/controllers/project/notes/ProjectNotesList.js')}}"></script>
+        <script type="text/javascript" src="{{asset('build/js/controllers/project/notes/ProjectNotesNew.js')}}"></script>
+        <script type="text/javascript" src="{{asset('build/js/controllers/project/notes/ProjectNotesEdit.js')}}"></script>
+        <script type="text/javascript" src="{{asset('build/js/controllers/project/notes/ProjectNotesRemove.js')}}"></script>
+        <script type="text/javascript" src="{{asset('build/js/controllers/project/notes/ProjectNotesShow.js')}}"></script>
         
         <!-- SERVICE'S -->
         <script type="text/javascript" src="{{asset('build/js/services/client.js')}}"></script>

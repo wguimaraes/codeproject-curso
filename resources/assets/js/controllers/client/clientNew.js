@@ -5,7 +5,7 @@ angular.module('app.controllers')
             	if($scope.form.$valid){
             		$scope.client.$save(function(client, a){
             			if(!client.error){
-            				$location.path('client');
+            				$location.path('clients');
             			}
             		});
             	}

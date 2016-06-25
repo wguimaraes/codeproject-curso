@@ -5,7 +5,7 @@ angular.module('app.controllers')
             	if($scope.form.$valid){
             		Client.update({id: $scope.client.id}, $scope.client, function(client){
             			if(!client.error){
-            				$location.path('client');
+            				$location.path('clients');
             			}
             		});
             	}

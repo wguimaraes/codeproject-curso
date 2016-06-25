@@ -20,8 +20,8 @@ class ClientTransformer extends TransformerAbstract {
     
     public function transform(Client $client){
         return[
-            'client_id' => $client->id,
-            'client_name' => $client->name,
+            'id' => $client->id,
+            'name' => $client->name,
             'responsible' => $client->responsible,
             'email' => $client->email,
             'phone' => $client->phone,

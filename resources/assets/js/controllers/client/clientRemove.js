@@ -3,7 +3,7 @@ angular.module('app.controllers')
             $scope.client = Client.get({id: $routeParams.id});
             $scope.remove = function(){
             	$scope.client.$delete().then(function(){
-            		$location.path('client');
+            		$location.path('clients');
             	});
             }
         }]);
