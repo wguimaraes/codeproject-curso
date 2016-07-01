@@ -34,7 +34,7 @@ class ClientService {
     
     public function find($id){
         try{
-            return $this->repository->find($id);
+            return $this->repository->skipPresenter()->find($id);
         }catch(ModelNotFoundException $e){
             return ['error' => true, 'message' => 'Client ' . $id . ' not found.'];
         }catch(Exception $e){
@@ -43,7 +43,6 @@ class ClientService {
     }
     
     public function create(array $data){
-        
         try{
             $this->validator->with($data)->passesOrFail();
             return $this->repository->create($data);

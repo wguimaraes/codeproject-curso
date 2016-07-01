@@ -1,8 +1,23 @@
-var app = angular.module('app', ['ngRoute', 'angular-oauth2', 'app.controllers']);
+var app = angular.module('app', ['ngRoute', 'angular-oauth2', 'app.controllers', 'app.services']);
 
 angular.module('app.controllers', ['ngMessages', 'angular-oauth2']);
+angular.module('app.services', ['ngResource']);
 
-app.config(['$routeProvider', 'OAuthProvider', function($routeProvider, OAuthProvider){
+app.provider('appConfig', function(){
+	var config = {
+		baseUrl: 'http://localhost:8000'
+	}
+	
+	return {
+		config: config,
+		$get: function(){
+			return config;
+		}
+	}
+})
+
+app.config(['$routeProvider', 'OAuthProvider', 'OAuthTokenProvider', 'appConfigProvider', 
+            function($routeProvider, OAuthProvider, OAuthTokenProvider, appConfigProvider){
     $routeProvider
             .when('/login', {
                 templateUrl: 'build/views/login.html',
@@ -11,12 +26,30 @@ app.config(['$routeProvider', 'OAuthProvider', function($routeProvider, OAuthPro
             .when('/home', {
                 templateUrl: 'build/views/home.html',
                 controller: 'HomeController'
+            })
+            .when('/client', {
+                templateUrl: 'build/views/clients/list.html',
+                controller: 'ClientListController'
+            })
+            .when('/client/new', {
+                templateUrl: 'build/views/clients/new.html',
+                controller: 'ClientNewController'
+            })
+            .when('/client/:id/edit', {
+                templateUrl: 'build/views/clients/edit.html',
+                controller: 'ClientEditController'
             });
     OAuthProvider.configure({
-        baseUrl: 'http://localhost:8000',
+        baseUrl: appConfigProvider.config.baseUrl,
         clientId: 'appid1',
         clientSecret: 'secret',
         grantPath: '/oauth/access_token'
+    });
+    OAuthTokenProvider.configure({
+    	name: 'token',
+    	options: {
+    		secure: false
+    	}
     });
 }]);
 
@@ -33,6 +66,6 @@ app.run(['$rootScope', '$window', 'OAuth', function($rootScope, $window, OAuth) 
       }
 
       // Redirect to `/login` with the `error_reason`.
-      return $window.location.href = '/login?error_reason=' + rejection.data.error;
+      return $window.location.href = '/#login?error_reason=' + rejection.data.error;
     });
 }]);
