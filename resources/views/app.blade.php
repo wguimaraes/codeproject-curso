@@ -96,6 +96,7 @@
         <script type="text/javascript" src="{{asset('build/js/controllers/clientList.js')}}"></script>
         <script type="text/javascript" src="{{asset('build/js/controllers/clientNew.js')}}"></script>
         <script type="text/javascript" src="{{asset('build/js/controllers/clientEdit.js')}}"></script>
+        <script type="text/javascript" src="{{asset('build/js/controllers/clientRemove.js')}}"></script>
         
         <!-- SERVICE'S -->
         <script type="text/javascript" src="{{asset('build/js/services/client.js')}}"></script>
