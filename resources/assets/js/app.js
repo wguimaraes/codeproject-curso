@@ -64,7 +64,7 @@ app.config(['$routeProvider', '$httpProvider', 'OAuthProvider', 'OAuthTokenProvi
             })
             .when('/project/:id/notes/new', {
                 templateUrl: 'build/views/projects/notes/new.html',
-                controller: 'ProjectNotesShowController'
+                controller: 'ProjectNotesNewController'
             })
             .when('/project/:id/notes/:idNote/edit', {
                 templateUrl: 'build/views/projects/notes/edit.html',

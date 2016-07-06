@@ -1,5 +1,5 @@
 angular.module('app.controllers')
-        .controller('ProjectNotesController', ['$scope', '$location', 'ProjectNotes', function($scope, $location, ProjectNotes){
+        .controller('ProjectNotesNewController', ['$scope', '$location', 'ProjectNotes', function($scope, $location, ProjectNotes){
             $scope.projectNotes = new ProjectNotes();
             $scope.save = function(){
             	if($scope.form.$valid){
