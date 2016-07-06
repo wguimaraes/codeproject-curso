@@ -106,10 +106,13 @@
         <script type="text/javascript" src="{{asset('build/js/controllers/project/notes/ProjectNotesRemove.js')}}"></script>
         <script type="text/javascript" src="{{asset('build/js/controllers/project/notes/ProjectNotesShow.js')}}"></script>
         
+        <script type="text/javascript" src="{{asset('build/js/controllers/project/ProjectList.js')}}"></script>
+        
         <!-- SERVICE'S -->
         <script type="text/javascript" src="{{asset('build/js/services/Client.js')}}"></script>
         <script type="text/javascript" src="{{asset('build/js/services/ProjectNotes.js')}}"></script>
         <script type="text/javascript" src="{{asset('build/js/services/User.js')}}"></script>
+        <script type="text/javascript" src="{{asset('build/js/services/Project.js')}}"></script>
     @else
         <script type="text/javascript" src="{{elixir('js/all.js')}}"></script>
     @endif
