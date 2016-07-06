@@ -22,7 +22,7 @@ class ProjectNoteTransformer extends TransformerAbstract {
         return[
             'note_id' => $note->id,
             'project_id' => $note->project_id,
-            'note_title' => $note->title,
+            'title' => $note->title,
             'content' => $note->content,
             'create_at' => $note->create_at,
             'update_at' => $note->update_at,
