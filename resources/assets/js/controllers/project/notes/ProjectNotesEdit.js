@@ -3,7 +3,7 @@ angular.module('app.controllers')
         	$scope.note = ProjectNotes.get({id: $routeParams.id, idNote: $routeParams.idNote});
             $scope.save = function(){
             	if($scope.form.$valid){
-            		ProjectNotes.update({id: $scope.note.project_id}, $scope.note.note_id, function(projectNote){
+            		ProjectNotes.update({id: $scope.note.project_id, idNote: $scope.note.note_id}, $scope.note, function(projectNote){
             			if(!projectNote.error){
             				$location.path('project/' + $routeParams.id + '/notes');
             			}

@@ -36,7 +36,7 @@ class ProjectNoteService {
         try{
             $projectNote = $this->repository->findWhere(['project_id' => $id, 'id' => $noteId]);
             if(sizeof($projectNote) > 0){
-                return $projectNote;
+                return $projectNote['data'][0];
             }else{
                 return ['error' => true, 'message' => 'Project note ' . $noteId . ' not found.'];
             }

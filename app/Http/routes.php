@@ -35,6 +35,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::group(['middleware' => 'oauth'], function(){
         
         Route::resource('client', 'ClientController', ['except' => ['create', 'edit']]);
+        Route::get('user/authenticated', 'UserController@authenticated');
         /*
          * O método Route::resource() equivale a agrupar todas as rotas do controller informado e 
          * permitir que essas executem métodos de get post, delete, update, etc..
