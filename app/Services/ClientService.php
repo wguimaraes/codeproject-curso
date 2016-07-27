@@ -34,7 +34,7 @@ class ClientService {
     
     public function find($id){
         try{
-            return $this->repository->skipPresenter()->find($id);
+            return $this->repository->find($id);
         }catch(ModelNotFoundException $e){
             return ['error' => true, 'message' => 'Client ' . $id . ' not found.'];
         }catch(Exception $e){
