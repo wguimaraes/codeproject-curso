@@ -107,6 +107,7 @@
         <script type="text/javascript" src="{{asset('build/js/controllers/project/notes/ProjectNotesShow.js')}}"></script>
         
         <script type="text/javascript" src="{{asset('build/js/controllers/project/ProjectList.js')}}"></script>
+        <script type="text/javascript" src="{{asset('build/js/controllers/project/ProjectNew.js')}}"></script>
         
          <!-- FILTER'S -->
         <script type="text/javascript" src="{{asset('build/js/filters/dateBr.js')}}"></script>
