@@ -26,15 +26,17 @@ app.provider('appConfig', function(){
 
 app.config(['$routeProvider', '$httpProvider', 'OAuthProvider', 'OAuthTokenProvider', 'appConfigProvider', 
             function($routeProvider, $httpProvider, OAuthProvider, OAuthTokenProvider, appConfigProvider){
-		$httpProvider.defaults.transformResponse = function(data, headers){
-			var headersGetter = headers();
-			if(headersGetter['content-type'] == 'application/json' || headersGetter['content-type'] == 'text/json'){
-				var dataJson = JSON.parse(data);
-				if(dataJson.hasOwnProperty('data')){
-					dataJson = dataJson.data;
+				$httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
+				$httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
+				$httpProvider.defaults.transformResponse = function(data, headers){
+				var headersGetter = headers();
+				if(headersGetter['content-type'] == 'application/json' || headersGetter['content-type'] == 'text/json'){
+					var dataJson = JSON.parse(data);
+					if(dataJson.hasOwnProperty('data')){
+						dataJson = dataJson.data;
+					}
+					return dataJson;
 				}
-				return dataJson;
-			}
 			return data;
 		};
     	$routeProvider
