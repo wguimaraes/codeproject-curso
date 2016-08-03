@@ -1,14 +1,22 @@
 angular.module('app.services')
-			.service('Project', ['$resource', '$filter', '$httpParamSerializer', 'appConfig', function($resource, $filter, $httpParamSerializer, appConfig){
+			.service('Project',
+			['$resource', '$filter', '$httpParamSerializer', 'appConfig',
+			function($resource, $filter, $httpParamSerializer, appConfig){
+				
 				return $resource(appConfig.baseUrl + '/project/:id', {id: '@id'},{
 					save: {
-						method: 'POST',
-						transformRequest: function(data){
-							if(angular.isObject(data) && data.hasOwnProperty('due_date')){
-								data.due_date = $filter('date')(data.due_date, 'yyyy-MM-dd');
-								return $httpParamSerializer(data);
+						method: 'POST'
+					},
+					get: {
+						method: 'GET',
+						transformResponse: function(data, headers){
+							var o = appConfig.utils.transformResponse(data, headers);
+							if(angular.isObject(o) && o.hasOwnProperty('due_date')){
+								var arrayData = o.due_date.split('-');
+								var month = parseInt(arrayData[1]) - 1;
+								o.due_date = new Date(arrayData[0], month, arrayData[2]);
 							}
-							return data;
+							return o;
 						}
 					},
 					update: {

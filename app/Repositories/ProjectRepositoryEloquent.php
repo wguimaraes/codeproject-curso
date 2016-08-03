@@ -18,7 +18,7 @@ use \CodeProject\Presenters\ProjectPresenter;
  * @author William
  */
 class ProjectRepositoryEloquent extends BaseRepository implements ProjectRepository {
-    
+	
     public function model(){
         return Project::class;
     }

@@ -108,6 +108,8 @@
         
         <script type="text/javascript" src="{{asset('build/js/controllers/project/ProjectList.js')}}"></script>
         <script type="text/javascript" src="{{asset('build/js/controllers/project/ProjectNew.js')}}"></script>
+        <script type="text/javascript" src="{{asset('build/js/controllers/project/ProjectEdit.js')}}"></script>
+        <script type="text/javascript" src="{{asset('build/js/controllers/project/ProjectRemove.js')}}"></script>
         
          <!-- FILTER'S -->
         <script type="text/javascript" src="{{asset('build/js/filters/dateBr.js')}}"></script>

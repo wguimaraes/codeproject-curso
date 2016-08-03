@@ -18,6 +18,15 @@ use \CodeProject\Presenters\ClientPresenter;
  * @author William
  */
 class ClientRepositoryEloquent extends BaseRepository implements ClientRepository {
+	
+	protected $fieldSearchable = [
+			'name',
+			'email'
+	];
+	
+	public function boot(){
+		$this->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
+	}
     
     public function model(){
         return Client::class;

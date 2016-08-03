@@ -2,17 +2,18 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Remover nota do projeto #{{note.project_id}}</div>
+                <div class="panel-heading">Remover projeto #{{note.project_id}}</div>
                 <div class="panel-body">
-                    <p>Deseja realmente excluir esta nota?</p>
+                    <p>Deseja realmente excluir este?</p>
                     <div class="alert alert-danger" ng-show="error.error">
                         <strong>Whoops!</strong> Ocorreram erros:
                         <div>{{error.message}}</div>
                     </div>
                     
                     <ul>
-                    	<li>Título: {{note.title}}</li>
-                    	<li>Conteúdo: {{note.content | limitTo: 40}}</li>
+                    	<li>Título: {{project.name}}</li>
+                    	<li>Cliente: {{project.client.data.name}}</li>
+                    	<li>Conteúdo: {{project.description | limitTo: 40}}</li>
                     </ul>
                     <div class="form-group">
                     	<div class="col-md-6 col-md-offset-4">
