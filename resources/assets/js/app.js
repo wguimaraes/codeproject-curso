@@ -1,10 +1,12 @@
-var app = angular.module('app', ['ngRoute', 'angular-oauth2', 'app.controllers', 'app.services', 'app.filters']);
+var app = angular.module('app', 
+		['ngRoute', 'angular-oauth2', 'app.controllers', 'app.services', 'app.filters',
+		 'ui.bootstrap.typeahead', 'ui.bootstrap.tpls']);
 
 angular.module('app.controllers', ['ngMessages', 'angular-oauth2']);
 angular.module('app.filters', []);
 angular.module('app.services', ['ngResource']);
 
-app.provider('appConfig', function(){
+app.provider('appConfig', ['$httpParamSerializerProvider', function($httpParamSerializerProvider){
 	var config = {
 		baseUrl: 'http://localhost:8000',
 		project: {
@@ -16,12 +18,21 @@ app.provider('appConfig', function(){
 		},
 		
 		utils: {
+			transformRequest: function(data){
+				if(angular.isObject(data)){
+					return $httpParamSerializerProvider.$get()(data);
+				}
+			},
 			transformResponse: function(data, headers){
 				var headersGetter = headers();
 				if(headersGetter['content-type'] == 'application/json' || headersGetter['content-type'] == 'text/json'){
 					var dataJson = JSON.parse(data);
 					if(dataJson.hasOwnProperty('data')){
 						dataJson = dataJson.data;
+					}
+					if(dataJson.hasOwnProperty('due_date') && !angular.isObject(dataJson.due_date)){
+						var arrayDate = dataJson.due_date.split('-');
+						dataJson.due_date = new Date(arrayDate[0], (parseInt(arrayDate[1]) - 1), parseInt(arrayDate[2]));
 					}
 					return dataJson;
 				}
@@ -36,13 +47,11 @@ app.provider('appConfig', function(){
 			return config;
 		}
 	}
-})
+}])
 
 app.config(['$routeProvider', '$httpProvider', 'OAuthProvider', 'OAuthTokenProvider', 'appConfigProvider', 
             function($routeProvider, $httpProvider, OAuthProvider, OAuthTokenProvider, appConfigProvider){
-				
 				$httpProvider.defaults.transformResponse = appConfigProvider.config.utils.transformResponse;
-				
 		    	$routeProvider
 		            .when('/login', {
 		                templateUrl: 'build/views/login.html',

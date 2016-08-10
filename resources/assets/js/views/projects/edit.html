@@ -27,12 +27,14 @@
                             <label class="col-md-4 control-label">Cliente:</label>
 
                             <div class="col-md-6">
-                                <select name="client_id" class="form-control" required 
-                                	ng-model="project.client_id" ng-options="o.id as o.name for o in clients">
-                                	<option value=""> <--- Selecione o cliente ---> </option>
-                                </select>
+                                <input type="text" class="form-control" name="client_id" required ng-model="clientSelected"
+									uib-typeahead="o as o.name for o in getClients($viewValue)"
+									typeahead-input-formatter="formatName($model);"
+									typeahead-on-select="getClientId($item)"
+									typeahead-editable="false" />
                                 <div ng-messages="form.client_id.$error" class="help-block" ng-show="form.client_id.$touched">
                                     <div ng-message="required">Campo obrigatório</div>
+                                    <div ng-message="editable">Selecione um cliente válido</div>
                                 </div>
                             </div>
                         </div>                          

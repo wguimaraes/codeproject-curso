@@ -84,7 +84,7 @@
         <script type="text/javascript" src="{{asset('build/js/vendor/angular-resource.min.js')}}"></script>
         <script type="text/javascript" src="{{asset('build/js/vendor/angular-animate.min.js')}}"></script>
         <script type="text/javascript" src="{{asset('build/js/vendor/angular-messages.min.js')}}"></script>
-        <script type="text/javascript" src="{{asset('build/js/vendor/ui-bootstrap.min.js')}}"></script>
+        <script type="text/javascript" src="{{asset('build/js/vendor/ui-bootstrap-tpls.min.js')}}"></script>
         <script type="text/javascript" src="{{asset('build/js/vendor/navbar.min.js')}}"></script>
         <script type="text/javascript" src="{{asset('build/js/vendor/angular-cookies.min.js')}}"></script>
         <script type="text/javascript" src="{{asset('build/js/vendor/query-string.js')}}"></script>
