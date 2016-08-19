@@ -8,6 +8,15 @@ angular.module('app.controllers')
         		$scope.project.due_date = new Date($scope.project.due_date);
         	});
         	$scope.status = appConfig.project.status;
+        	
+        	$scope.popup1 = {
+                opened: false
+            };
+            
+            $scope.open1 = function($event){
+            	$scope.popup1.opened = true;
+            };
+        	
             $scope.save = function(){
             	if($scope.form.$valid){
             		$scope.project.owner_id = $cookies.getObject('user').id;

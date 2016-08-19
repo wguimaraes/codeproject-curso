@@ -54,7 +54,18 @@
                             <label class="col-md-4 control-label">Data de entrega:</label>
 
                             <div class="col-md-6">
-                                <input class="form-control" type="date" name="due_date" ng-model="project.due_date" required>
+                                <!-- <input class="form-control" type="date" name="due_date" ng-model="project.due_date" required> -->
+                                <p class="input-group">
+					              <input type="text" class="form-control" name="due_date" 
+					              uib-datepicker-popup="dd/MM/yyyy" 
+					              ng-model="project.due_date" 
+					              is-open="popup1.opened"  
+					              close-text="Close"
+					              required />
+					              <span class="input-group-btn">
+					                <button type="button" class="btn btn-default" ng-click="open1($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+					              </span>
+					            </p>
                                 <div ng-messages="form.due_date.$error" class="help-block" ng-show="form.due_date.$touched">
                                     <div ng-message="required">Campo obrigatório</div>
                                 </div>
