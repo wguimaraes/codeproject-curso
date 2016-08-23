@@ -11,32 +11,14 @@ class ProjectFileController extends Controller
     
     private $repository;
     private $service;
-    private $userId;
     
     public function __construct(ProjectFileRepository $repository, ProjectFileService $service) {
         $this->repository = $repository;
         $this->service = $service;
-        $this->userId = \Authorizer::getResourceOwnerId();
     }
     
-    private function checkOwnerId($id){
-        return $this->repository->isOwner($id, $this->userId);
-    }
-    
-    private function checkProjectMember($id){
-        return $this->repository->hasMember($id, $this->userId);
-    }
-    
-    private function projectViewPermission($id){
-        if($this->checkOwnerId($id) || $this->checkProjectMember($id)){
-            return true;
-        }else{
-            return false;
-        }
-    }
-    
-    public function index(){
-        return $this->repository->findWhere(['owner_id' => $this->userId]);
+    public function index($projectId){
+        return $this->repository->findWhere(['project_id' => $projectId]);
     }
     
     public function store(Request $request){
@@ -47,27 +29,37 @@ class ProjectFileController extends Controller
             $data['project_id'] = $request->project_id;
             $data['extension'] = $file->getClientOriginalExtension();
             $data['file'] = $file;
-            return $this->service->createFile($data);
+            return $this->service->create($data);
         }else{
             return ['error' => true, 'message' => 'No file to storage.'];
         }
     }
     
-    public function show($id){
-        if(!$this->projectViewPermission($id)){
+    public function update(Request $request, $fileId){
+    	if($this->service->checkOwnerId($fileId) == false){
+    		return ['error' => true, 'message' => 'Access forbidden'];
+    	}
+    	return $this->service->update($request->all(), $fileId);
+    }
+    
+    public function show($fileId){
+        if(!$this->service->projectViewPermission($fileId)){
             return ['error' => true, 'message' => 'Access forbidden'];
         }
         return $this->service->find($id);
     }
     
     public function destroy($projectId, $fileId){
-        if(!$this->checkOwnerId($projectId)){
+        if(!$this->service->checkOwnerId($fileId)){
             return ['error' => true, 'message' => 'Access forbidden'];
         }
         return $this->service->deleteFile($projectId, $fileId);
     }
     
     public function showFile($fileId){
-    	
+    	if(!$this->service->projectViewPermission($fileId)){
+    		return ['error' => true, 'message' => 'Access forbidden'];
+    	}
+    	return response()->download($this->service->getFilePath($fileId));
     }
 }

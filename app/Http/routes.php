@@ -57,12 +57,12 @@ Route::group(['middleware' => ['web']], function () {
             Route::put('{id}/notes/{noteId}', 'ProjectNoteController@update');
             Route::delete('{id}/notes/{noteId}', 'ProjectNoteController@destroy');
             
-            Route::get('{id}/files', 'ProjectNoteController@index');
-            Route::post('{id}/files', 'ProjectNoteController@store');
-            Route::put('{id}/files/{fileId}', 'ProjectNoteController@update');
-            Route::delete('{id}/files/{fileId}', 'ProjectNoteController@destroy');
-            Route::get('files/{fileId}', 'ProjectNoteController@show');
-            Route::get('files/{fileId}/download', 'ProjectNoteController@showFile');
+            Route::get('{id}/files', 'ProjectFileController@index');
+            Route::post('{id}/files', 'ProjectFileController@store');
+            Route::put('{id}/files/{fileId}', 'ProjectFileController@update');
+            Route::delete('{id}/files/{fileId}', 'ProjectFileController@destroy');
+            Route::get('files/{fileId}', 'ProjectFileController@show');
+            Route::get('files/{fileId}/download', 'ProjectFileeController@showFile');
             
             Route::get('{id}/tasks', 'ProjectTaskController@index');
             Route::post('{id}/tasks', 'ProjectTaskController@store');

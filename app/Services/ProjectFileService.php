@@ -9,6 +9,7 @@
 namespace CodeProject\Services;
 
 use \CodeProject\Repositories\ProjectFileRepository;
+use \CodeProject\Validators\ProjectFileValidator;
 use \Prettus\Validator\Exceptions\ValidatorException;
 use \Illuminate\Database\Eloquent\ModelNotFoundException;
 use \Illuminate\Database\QueryException;
@@ -25,15 +26,30 @@ use Illuminate\Contracts\Filesystem\Factory as Storage;
 class ProjectFileService {
     
     protected $repository;
+    protected $validator;
     protected $projectRepository;
     protected $fileSystem;
     protected $storage;
+    private $userId;
 
-    public function __construct(ProjectFileRepository $repository, ProjectRepository $projectRepository, Filesystem $fileSystem, Storage $storage) {
+    public function __construct(ProjectFileRepository $repository, ProjectRepository $projectRepository, 
+    		ProjectFileValidator $validator, Filesystem $fileSystem, Storage $storage) {
         $this->repository = $repository;
+        $this->validator = $validator;
         $this->projectRepository = $projectRepository;
         $this->fileSystem = $fileSystem;
         $this->storage = $storage;
+        $this->userId = \Authorizer::getResourceOwnerId();
+    }
+    
+    public function find($id){
+    	try{
+    		$this->repository->find($id);
+    	}catch(ModelNotFoundException $e){
+            return ['error' => true, 'message' => 'Project file ' . $id . ' not found.'];
+        }catch(Exception $e){
+            return ['error' => true, 'message' => 'An error occurred on searching project ' . $id . ' .'];
+        }
     }
     
     public function findWhere($id, $fileId){
@@ -51,23 +67,25 @@ class ProjectFileService {
         }
     }
     
-    public function create(array $data){
-        
-        try{
-            return $this->repository->create($data);
-        }catch(ValidatorException $e){
-            return ['error' => true, 'message' => $e->getMessageBag()];
-        }catch(QueryException $e){
-            return ['error' => true, 'message' => 'Dependency fields have invalid values for project file'];
-        }catch(Exception $e){
-            return ['error' => true, 'message' => 'Error on create project file.'];
-        }
-        
+	public function create(array $data){
+    	try{
+    		$project = $this->projectRepository->skipPresenter()->find($data['project_id']);
+    		$projectFile = $project->files()->create($data);
+    		$this->storage->put($projectFile->name . '.' . $data['extension'], $this->fileSystem->get($data['file']));
+    		return ['message' => 'File was uploaded!'];
+    	}catch(QueryException $e){
+    		return ['error' => true, 'message' => 'An error occurred on upload file.'];
+    	}catch(ModelNotFoundException $e){
+    		return ['error' => true, 'message' => 'Project id: ' . $id . ' not found.'];
+    	}catch(Exception $e){
+    		return ['error' => true, 'message' => 'Error on upload file to project ' . $id . '.'];
+    	}
     }
     
     public function update(array $data, $id){
         
         try{
+        	$this->validator->with($data)->passesOrFail();
             return $this->repository->update($data, $id);
         }catch(ValidatorException $e){
             return ['error' => true, 'message' => $e->getMessageBag()];
@@ -93,21 +111,6 @@ class ProjectFileService {
         }
     }
     
-    public function createFile(array $data){
-    	try{
-    		$project = $this->projectRepository->skipPresenter()->find($data['project_id']);
-    		$projectFile = $project->files()->create($data);
-    		$this->storage->put($projectFile->name . '.' . $data['extension'], $this->fileSystem->get($data['file']));
-    		return ['message' => 'File was uploaded!'];
-    	}catch(QueryException $e){
-    		return ['error' => true, 'message' => 'An error occurred on upload file.'];
-    	}catch(ModelNotFoundException $e){
-    		return ['error' => true, 'message' => 'Project id: ' . $id . ' not found.'];
-    	}catch(Exception $e){
-    		return ['error' => true, 'message' => 'Error on upload file to project ' . $id . '.'];
-    	}
-    }
-    
     public function deleteFile($projectId, $fileId){
     	try{
     		$project = $this->projectRepository->skipPresenter()->find($projectId);
@@ -129,6 +132,36 @@ class ProjectFileService {
     		return ['error' => true, 'message' => 'Project id: ' . $projectId . ' not found.'];
     	}catch(Exception $e){
     		return ['error' => true, 'message' => 'Error on delete file to project ' . $projectId . '.'];
+    	}
+    }
+    
+    public function checkOwnerId($id){
+    	return $this->projectRepository->isOwner($id, $this->userId);
+    }
+    
+    public function checkProjectMember($id){
+    	return $this->projectRepository->hasMember($id, $this->userId);
+    }
+    
+    public function projectViewPermission($id){
+    	if($this->checkOwnerId($id) || $this->checkProjectMember($id)){
+    		return true;
+    	}else{
+    		return false;
+    	}
+    }
+    
+    public function getFilePath($id){
+    	$projectFile = $this->repository->skipPresenter()->find($id);
+    	return $this->getBaseUrl($projectFile);
+    }
+    
+    private function getBaseUrl($projectFile){
+    	switch($this->storage->getDefaultDriver()){
+    		case 'local':
+    			return $this->storage->getDriver()->getAdapter()->getPathPrefix() . '/' . 
+    			$projectFile->id . '.' . $projectFile->extension;
+    			break;
     	}
     }
     

@@ -11,16 +11,14 @@ namespace CodeProject\Validators;
 use Prettus\Validator\LaravelValidator;
 
 /**
- * Description of ProjectTaskValidator
+ * Description of ProjectFileValidator
  *
  * @author William
  */
-class ProjectTaskValidator extends LaravelValidator {
+class ProjectFileValidator extends LaravelValidator {
     protected $rules = [
         'project_id' => 'required|integer',
         'name' => 'required',
-        'start_date' => 'required',
-        'due_date' => 'required',
-        'status' => 'required|integer',
+        'extension' => 'required'
     ];
 }

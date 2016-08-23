@@ -3,8 +3,8 @@
 namespace CodeProject\Http\Controllers;
 
 use Illuminate\Http\Request;
-use \CodeProject\Repositories\ProjectRepository;
-use CodeProject\Services\ProjectService;
+use \CodeProject\Repositories\ProjectFileRepository;
+use CodeProject\Services\ProjectFileService;
 
 class ProjectController extends Controller
 {
@@ -13,7 +13,7 @@ class ProjectController extends Controller
     private $service;
     private $userId;
     
-    public function __construct(ProjectRepository $repository, ProjectService $service) {
+    public function __construct(ProjectFileRepository $repository, ProjectFileService $service) {
         $this->repository = $repository;
         $this->service = $service;
         $this->userId = \Authorizer::getResourceOwnerId();

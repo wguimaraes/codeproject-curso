@@ -32,11 +32,11 @@ class ProjectService {
     
     public function find($id){
         try{
-            return $this->repository->with(['client', 'user'])->find($id);
+            return $this->repository->find($id);
         }catch(ModelNotFoundException $e){
-            return ['error' => true, 'message' => 'Project ' . $id . ' not found.'];
+            return ['error' => true, 'message' => 'Project file' . $id . ' not found.'];
         }catch(Exception $e){
-            return ['error' => true, 'message' => 'An error occurred on searching project ' . $id . '.'];
+            return ['error' => true, 'message' => 'An error occurred on searching project file ' . $id . '.'];
         }
     }
     
