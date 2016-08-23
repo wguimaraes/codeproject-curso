@@ -13,7 +13,7 @@ class ProjectFileController extends Controller
     private $service;
     private $userId;
     
-    public function __construct(ProjectRepository $repository, ProjectService $service) {
+    public function __construct(ProjectFileRepository $repository, ProjectFileService $service) {
         $this->repository = $repository;
         $this->service = $service;
         $this->userId = \Authorizer::getResourceOwnerId();
@@ -65,5 +65,9 @@ class ProjectFileController extends Controller
             return ['error' => true, 'message' => 'Access forbidden'];
         }
         return $this->service->deleteFile($projectId, $fileId);
+    }
+    
+    public function showFile($fileId){
+    	
     }
 }
