@@ -112,14 +112,26 @@
         <script type="text/javascript" src="{{asset('build/js/controllers/project/ProjectEdit.js')}}"></script>
         <script type="text/javascript" src="{{asset('build/js/controllers/project/ProjectRemove.js')}}"></script>
         
-         <!-- FILTER'S -->
+        <script type="text/javascript" src="{{asset('build/js/controllers/project/files/ProjectFilesList.js')}}"></script>
+        <script type="text/javascript" src="{{asset('build/js/controllers/project/files/ProjectFilesNew.js')}}"></script>
+        <script type="text/javascript" src="{{asset('build/js/controllers/project/files/ProjectFilesEdit.js')}}"></script>
+        <script type="text/javascript" src="{{asset('build/js/controllers/project/files/ProjectFilesRemove.js')}}"></script>
+        
+        <!-- DIRECTIVE'S -->
+        <script type="text/javascript" src="{{asset('build/js/directives/ProjectFilesDownload.js')}}"></script>
+                
+        <!-- FILTER'S -->
         <script type="text/javascript" src="{{asset('build/js/filters/dateBr.js')}}"></script>
         
         <!-- SERVICE'S -->
+        
+         <script type="text/javascript" src="{{asset('build/js/services/Urls.js')}}"></script>
+        
         <script type="text/javascript" src="{{asset('build/js/services/Client.js')}}"></script>
         <script type="text/javascript" src="{{asset('build/js/services/ProjectNotes.js')}}"></script>
         <script type="text/javascript" src="{{asset('build/js/services/User.js')}}"></script>
         <script type="text/javascript" src="{{asset('build/js/services/Project.js')}}"></script>
+        <script type="text/javascript" src="{{asset('build/js/services/ProjectFiles.js')}}"></script>
     @else
         <script type="text/javascript" src="{{elixir('js/all.js')}}"></script>
     @endif

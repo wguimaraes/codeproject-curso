@@ -1,10 +1,11 @@
 var app = angular.module('app', 
-		['ngRoute', 'angular-oauth2', 'app.controllers', 'app.services', 'app.filters',
+		['ngRoute', 'angular-oauth2', 'app.controllers', 'app.services', 'app.filters', 'app.directives',
 		 'ui.bootstrap.typeahead', 'ui.bootstrap.datepicker', 'ui.bootstrap.tpls', 'ngFileUpload']);
 
 angular.module('app.controllers', ['ngMessages', 'angular-oauth2']);
 angular.module('app.filters', []);
 angular.module('app.services', ['ngResource']);
+angular.module('app.directives', []);
 
 app.provider('appConfig', ['$httpParamSerializerProvider', function($httpParamSerializerProvider){
 	var config = {
@@ -15,6 +16,10 @@ app.provider('appConfig', ['$httpParamSerializerProvider', function($httpParamSe
 			           {value: 2, label: 'Iniciado'},
 			           {value: 3, label: 'Finalizado'}
 			        ]
+		},
+		
+		urls: {
+			projectFile: '/project/{{id}}/files/{{idFile}}'
 		},
 		
 		utils: {
@@ -114,20 +119,20 @@ app.config(['$routeProvider', '$httpProvider', 'OAuthProvider', 'OAuthTokenProvi
 		                controller: 'ProjectNotesRemoveController'
 		            })
 		            .when('/project/:id/files', {
-		                templateUrl: 'build/views/projects/file/list.html',
-		                controller: 'ProjectFileListController'
+		                templateUrl: 'build/views/projects/files/list.html',
+		                controller: 'ProjectFilesListController'
 		            })
 		            .when('/project/:id/file/new', {
-		                templateUrl: 'build/views/projects/file/new.html',
-		                controller: 'ProjectFileNewController'
+		                templateUrl: 'build/views/projects/files/new.html',
+		                controller: 'ProjectFilesNewController'
 		            })
 		            .when('/project/:id/file/:fileId/edit', {
-		                templateUrl: 'build/views/projects/file/edit.html',
-		                controller: 'ProjectFileEditController'
+		                templateUrl: 'build/views/projects/files/edit.html',
+		                controller: 'ProjectFilesEditController'
 		            })
 		            .when('/project/:id/file/:fileId/remove/', {
-		                templateUrl: 'build/views/projects/file/remove.html',
-		                controller: 'ProjectFileRemoveController'
+		                templateUrl: 'build/views/projects/files/remove.html',
+		                controller: 'ProjectFilesRemoveController'
 		            });
 		    		
 				    OAuthProvider.configure({

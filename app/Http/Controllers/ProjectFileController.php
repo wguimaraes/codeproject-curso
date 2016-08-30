@@ -3,8 +3,8 @@
 namespace CodeProject\Http\Controllers;
 
 use Illuminate\Http\Request;
-use \CodeProject\Repositories\ProjectRepository;
-use CodeProject\Services\ProjectService;
+use \CodeProject\Repositories\ProjectFileRepository;
+use CodeProject\Services\ProjectFileService;
 
 class ProjectFileController extends Controller
 {
@@ -24,7 +24,7 @@ class ProjectFileController extends Controller
     public function store(Request $request){
         $file = $request->file('file');
         if($file){
-            $data['name'] = $request->project_id . '_' . $request->name;
+            $data['name'] = $request->name;
             $data['description'] = $request->description;
             $data['project_id'] = $request->project_id;
             $data['extension'] = $file->getClientOriginalExtension();
@@ -46,7 +46,7 @@ class ProjectFileController extends Controller
         if(!$this->service->projectViewPermission($fileId)){
             return ['error' => true, 'message' => 'Access forbidden'];
         }
-        return $this->service->find($id);
+        return $this->service->find($fileId);
     }
     
     public function destroy($projectId, $fileId){
@@ -60,6 +60,15 @@ class ProjectFileController extends Controller
     	if(!$this->service->projectViewPermission($fileId)){
     		return ['error' => true, 'message' => 'Access forbidden'];
     	}
-    	return response()->download($this->service->getFilePath($fileId));
+    	
+    	$filePath		= $this->service->getFilePath($fileId);
+    	$fileContent	= file_get_contents($filePath);
+    	$file64			= base64_encode($fileContent);
+    	
+    	return [
+    			'file' => $file64,
+    			'size' => filesize($filePath),
+    			'name' => $this->service->getFileName($fileId)
+    	];
     }
 }

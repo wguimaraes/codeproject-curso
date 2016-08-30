@@ -1,0 +1,39 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
+                <div class="panel-heading">Listagem de arquivos do projeto #{{file.project_id}}</div>
+                <div class="panel-body">
+                    
+                    <div class="alert alert-danger" ng-show="error.error">
+                        <strong>Whoops!</strong> Ocorreram erros:
+                        <div>{{error.message}}</div>
+                    </div>
+                    <table class="table">
+                    	<thead>
+                    		<tr>
+                    			<th>Nome</th>
+                    			<th>Descrição</th>
+                    			<th>Ações</th>
+                    		</tr>
+                    	</thead>
+                    	<tbody>
+                    		<tr ng-repeat="o in projectFiles">
+                    			<td>{{o.name}}</td>
+                    			<td>{{o.description | limitTo: 25}}...</td>
+                    			<td>
+                    				<project-files-download id-file="{{o.id}}"></project-files-download>
+                    			
+                    				<a ng-href="#/project/{{o.project_id}}/file/{{o.id}}/edit" class="btn btn-default">Editar</a>
+                    			
+                    				<a ng-href="#/project/{{o.project_id}}/file/{{o.id}}/remove" class="btn btn-default">Remover</a>
+                    			</td>
+                    		</tr>
+                    	</tbody>
+                    </table>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

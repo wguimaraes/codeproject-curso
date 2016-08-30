@@ -24,10 +24,12 @@ class ProjectService {
     
     protected $repository;
     protected $validator;
+    protected $userId;
 
     public function __construct(ProjectRepository $repository, ProjectValidator $validator) {
         $this->repository = $repository;
         $this->validator = $validator;
+        $this->userId = \Authorizer::getResourceOwnerId();
     }
     
     public function find($id){
@@ -38,6 +40,10 @@ class ProjectService {
         }catch(Exception $e){
             return ['error' => true, 'message' => 'An error occurred on searching project file ' . $id . '.'];
         }
+    }
+    
+    public function findWhere(){
+    	return $this->repository->findWhere(['owner_id' => $this->userId]);
     }
     
     public function create(array $data){
@@ -132,6 +138,14 @@ class ProjectService {
     private function isMember($projectId, $memberId){
         $project = $this->repository->skipPresenter()->find($projectId);
         return $project->members->find($memberId);
+    }
+    
+    public function checkOwnerId($id){
+    	return $this->repository->isOwner($id, $this->userId);
+    }
+    
+    public function checkProjectMember($id){
+    	return $this->repository->hasMember($id, $this->userId);
     }
     
 }

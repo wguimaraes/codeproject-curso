@@ -9,6 +9,7 @@
 namespace CodeProject\Services;
 
 use \CodeProject\Repositories\ProjectFileRepository;
+use \CodeProject\Repositories\ProjectRepository;
 use \CodeProject\Validators\ProjectFileValidator;
 use \Prettus\Validator\Exceptions\ValidatorException;
 use \Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -71,7 +72,7 @@ class ProjectFileService {
     	try{
     		$project = $this->projectRepository->skipPresenter()->find($data['project_id']);
     		$projectFile = $project->files()->create($data);
-    		$this->storage->put($projectFile->name . '.' . $data['extension'], $this->fileSystem->get($data['file']));
+    		$this->storage->put($projectFile->getFileName(), $this->fileSystem->get($data['file']));
     		return ['message' => 'File was uploaded!'];
     	}catch(QueryException $e){
     		return ['error' => true, 'message' => 'An error occurred on upload file.'];
@@ -98,33 +99,19 @@ class ProjectFileService {
         }
     }
     
-    public function destroy($id){
-        try{
-            $this->repository->delete($id);
-            return ['message' => 'Project file ' . $id . ' has ben deleted.'];
-        }catch(QueryException $e){
-            return ['error' => true, 'message' => 'Project file ' . $id . ' can\'t be deleted because the query has errors'];
-        }catch(ModelNotFoundException $e){
-            return ['error' => true, 'message' => 'Project file id: ' . $id . ' not found.'];
-        }catch(Exception $e){
-            return ['error' => true, 'message' => 'Error on delete project file ' . $id . '.'];
-        }
-    }
-    
     public function deleteFile($projectId, $fileId){
     	try{
-    		$project = $this->projectRepository->skipPresenter()->find($projectId);
-    		if($project){
-    			$projectFile = $project->files()->find($fileId);
+    		$projectFile = $this->repository->skipPresenter()->find($fileId);
+    		if($projectFile){
     			if($projectFile){
-    				$this->storage->delete($projectFile->name . '.' . $projectFile->extension);
-    				$project->files()->delete($fileId);
+    				if($this->storage->exists($projectFile->project_id . '_' . $projectFile->getFileName())){
+    					$this->storage->delete($projectFile->project_id . '_' . $projectFile->getFileName());
+    				}
+    				$projectFile->delete();
     				return ['message' => 'File ' . $projectFile->name . '.' . $projectFile->extension . ' was deleted!'];
-    			}else{
-    				return ['error' => true, 'message' => 'File ' . $fileId . ' not found in project ' . $projectId];
     			}
     		}else{
-    			return ['error' => true, 'message' => 'Project' . $projectId . ' not found'];
+    			return ['error' => true, 'message' => 'File ' . $fileId . ' not found in project ' . $projectId];
     		}
     	}catch(QueryException $e){
     		return ['error' => true, 'message' => 'An error occurred on delete file.'];
@@ -135,16 +122,18 @@ class ProjectFileService {
     	}
     }
     
-    public function checkOwnerId($id){
-    	return $this->projectRepository->isOwner($id, $this->userId);
+    public function checkOwnerId($fileId){
+    	$project_id = $this->repository->skipPresenter()->find($fileId)->project_id;
+    	return $this->projectRepository->isOwner($project_id, $this->userId);
     }
     
-    public function checkProjectMember($id){
-    	return $this->projectRepository->hasMember($id, $this->userId);
+    public function checkProjectMember($fileId){
+    	$project_id = $this->repository->skipPresenter()->find($fileId)->project_id;
+    	return $this->projectRepository->hasMember($project_id, $this->userId);
     }
     
-    public function projectViewPermission($id){
-    	if($this->checkOwnerId($id) || $this->checkProjectMember($id)){
+    public function projectViewPermission($fileId){
+    	if($this->checkOwnerId($fileId) || $this->checkProjectMember($fileId)){
     		return true;
     	}else{
     		return false;
@@ -156,11 +145,16 @@ class ProjectFileService {
     	return $this->getBaseUrl($projectFile);
     }
     
+    public function getFileName($fileId){
+    	$projectFile = $this->repository->find($fileId);
+    	return $projectFile->getFileName();
+    }
+    
     private function getBaseUrl($projectFile){
     	switch($this->storage->getDefaultDriver()){
     		case 'local':
     			return $this->storage->getDriver()->getAdapter()->getPathPrefix() . '/' . 
-    			$projectFile->id . '.' . $projectFile->extension;
+    			$projectFile->getFileName();
     			break;
     	}
     }

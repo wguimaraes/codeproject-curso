@@ -1,0 +1,26 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
+                <div class="panel-heading">Remover nota do projeto #{{note.project_id}}</div>
+                <div class="panel-body">
+                    <p>Deseja realmente excluir esta nota?</p>
+                    <div class="alert alert-danger" ng-show="error.error">
+                        <strong>Whoops!</strong> Ocorreram erros:
+                        <div>{{error.message}}</div>
+                    </div>
+                    
+                    <ul>
+                    	<li>Título: {{note.title}}</li>
+                    	<li>Conteúdo: {{note.content | limitTo: 40}}</li>
+                    </ul>
+                    <div class="form-group">
+                    	<div class="col-md-6 col-md-offset-4">
+                    		<button type="submit" class="btn btn-danger" ng-click="remove()">Remover</button>
+                    	</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

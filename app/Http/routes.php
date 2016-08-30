@@ -62,7 +62,7 @@ Route::group(['middleware' => ['web']], function () {
             Route::put('{id}/files/{fileId}', 'ProjectFileController@update');
             Route::delete('{id}/files/{fileId}', 'ProjectFileController@destroy');
             Route::get('files/{fileId}', 'ProjectFileController@show');
-            Route::get('files/{fileId}/download', 'ProjectFileeController@showFile');
+            Route::get('files/{fileId}/download', 'ProjectFileController@showFile');
             
             Route::get('{id}/tasks', 'ProjectTaskController@index');
             Route::post('{id}/tasks', 'ProjectTaskController@store');
@@ -74,8 +74,6 @@ Route::group(['middleware' => ['web']], function () {
             Route::post('{id}/members/{memberId}', 'ProjectController@addMember');
             Route::delete('{id}/members/{memberId}', 'ProjectController@removeMember');
             
-            Route::post('{id}/file', 'ProjectFileController@store');
-            Route::delete('{id}/file/{fileId}', 'ProjectFileController@destroy');
         });
 //        Route::get('project/{id}/notes', 'ProjectNoteController@index');
 //        Route::post('project/{id}/notes', 'ProjectNoteController@store');
