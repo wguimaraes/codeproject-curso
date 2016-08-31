@@ -59,7 +59,7 @@ Route::group(['middleware' => ['web']], function () {
             
             Route::get('{id}/files', 'ProjectFileController@index');
             Route::post('{id}/files', 'ProjectFileController@store');
-            Route::put('{id}/files/{fileId}', 'ProjectFileController@update');
+            Route::put('files/{fileId}', 'ProjectFileController@update');
             Route::delete('{id}/files/{fileId}', 'ProjectFileController@destroy');
             Route::get('files/{fileId}', 'ProjectFileController@show');
             Route::get('files/{fileId}/download', 'ProjectFileController@showFile');

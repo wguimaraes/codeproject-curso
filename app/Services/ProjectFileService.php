@@ -45,7 +45,7 @@ class ProjectFileService {
     
     public function find($id){
     	try{
-    		$this->repository->find($id);
+    		return $this->repository->find($id);
     	}catch(ModelNotFoundException $e){
             return ['error' => true, 'message' => 'Project file ' . $id . ' not found.'];
         }catch(Exception $e){
@@ -104,11 +104,11 @@ class ProjectFileService {
     		$projectFile = $this->repository->skipPresenter()->find($fileId);
     		if($projectFile){
     			if($projectFile){
-    				if($this->storage->exists($projectFile->project_id . '_' . $projectFile->getFileName())){
-    					$this->storage->delete($projectFile->project_id . '_' . $projectFile->getFileName());
+    				if($this->storage->exists($projectFile->getFileName())){
+    					$this->storage->delete($projectFile->getFileName());
     				}
     				$projectFile->delete();
-    				return ['message' => 'File ' . $projectFile->name . '.' . $projectFile->extension . ' was deleted!'];
+    				return ['message' => 'File ' . $projectFile->id . '.' . $projectFile->extension . ' was deleted!'];
     			}
     		}else{
     			return ['error' => true, 'message' => 'File ' . $fileId . ' not found in project ' . $projectId];
