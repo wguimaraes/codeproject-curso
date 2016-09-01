@@ -50,7 +50,7 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::resource('project', 'ProjectController', ['except' => ['create', 'edit']]);
         
-        Route::group(['prefix' => 'project'], function(){     
+        Route::group(['prefix' => 'project', 'middleware' => 'check-project-permission'], function(){     
             Route::get('{id}/notes', 'ProjectNoteController@index');
             Route::post('{id}/notes', 'ProjectNoteController@store');
             Route::get('{id}/notes/{noteId}', 'ProjectNoteController@show');
@@ -59,10 +59,10 @@ Route::group(['middleware' => ['web']], function () {
             
             Route::get('{id}/files', 'ProjectFileController@index');
             Route::post('{id}/files', 'ProjectFileController@store');
-            Route::put('files/{fileId}', 'ProjectFileController@update');
+            Route::put('{id}/files/{fileId}', 'ProjectFileController@update');
             Route::delete('{id}/files/{fileId}', 'ProjectFileController@destroy');
-            Route::get('files/{fileId}', 'ProjectFileController@show');
-            Route::get('files/{fileId}/download', 'ProjectFileController@showFile');
+            Route::get('{id}/files/{fileId}', 'ProjectFileController@show');
+            Route::get('{id}/files/{fileId}/download', 'ProjectFileController@showFile');
             
             Route::get('{id}/tasks', 'ProjectTaskController@index');
             Route::post('{id}/tasks', 'ProjectTaskController@store');

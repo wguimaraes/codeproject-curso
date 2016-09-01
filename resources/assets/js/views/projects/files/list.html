@@ -22,7 +22,7 @@
                     			<td>{{o.name}}</td>
                     			<td>{{o.description | limitTo: 25}}...</td>
                     			<td>
-                    				<project-files-download id-file="{{o.id}}"></project-files-download>
+                    				<project-files-download id-project="{{o.project_id}}" id-file="{{o.id}}"></project-files-download>
                     			
                     				<a ng-href="#/project/{{o.project_id}}/file/{{o.id}}/edit" class="btn btn-default">Editar</a>
                     			

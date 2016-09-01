@@ -148,4 +148,12 @@ class ProjectService {
     	return $this->repository->hasMember($id, $this->userId);
     }
     
+    public function projectViewPermission($id){
+    	if($this->service->checkOwnerId($id) || $this->service->checkProjectMember($id)){
+    		return true;
+    	}else{
+    		return false;
+    	}
+    }
+    
 }

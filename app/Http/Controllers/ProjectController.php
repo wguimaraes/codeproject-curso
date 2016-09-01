@@ -15,14 +15,8 @@ class ProjectController extends Controller
     public function __construct(ProjectRepository $repository, ProjectService $service) {
         $this->repository = $repository;
         $this->service = $service;
-    }
-    
-    private function projectViewPermission($id){
-        if($this->service->checkOwnerId($id) || $this->service->checkProjectMember($id)){
-            return true;
-        }else{
-            return false;
-        }
+        $this->middleware('check-project-owner', ['except' => ['store', 'show', 'index']]);
+        $this->middleware('check-project-permission', ['except' => ['store', 'update', 'destroy']]);
     }
     
     public function index(){
@@ -34,9 +28,6 @@ class ProjectController extends Controller
     }
     
     public function show($id){
-        if(!$this->projectViewPermission($id)){
-            return ['error' => true, 'message' => 'Access forbidden'];
-        }
         return $this->service->find($id);
     }
     

@@ -13,7 +13,7 @@
                     <ul>
                     	<li>Título: {{file.name}}</li>
                     	<li>Conteúdo: {{file.description | limitTo: 25}}</li>
-                    	<li><project-files-download id-file="{{file.id}}"></project-files-download></li>
+                    	<li><project-files-download id-project="{{file.project_id}}" id-file="{{file.id}}"></project-files-download></li>
                     </ul>
                     <div class="form-group">
                     	<div class="col-md-6 col-md-offset-4">

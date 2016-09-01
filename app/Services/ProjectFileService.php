@@ -122,24 +122,6 @@ class ProjectFileService {
     	}
     }
     
-    public function checkOwnerId($fileId){
-    	$project_id = $this->repository->skipPresenter()->find($fileId)->project_id;
-    	return $this->projectRepository->isOwner($project_id, $this->userId);
-    }
-    
-    public function checkProjectMember($fileId){
-    	$project_id = $this->repository->skipPresenter()->find($fileId)->project_id;
-    	return $this->projectRepository->hasMember($project_id, $this->userId);
-    }
-    
-    public function projectViewPermission($fileId){
-    	if($this->checkOwnerId($fileId) || $this->checkProjectMember($fileId)){
-    		return true;
-    	}else{
-    		return false;
-    	}
-    }
-    
     public function getFilePath($id){
     	$projectFile = $this->repository->skipPresenter()->find($id);
     	return $this->getBaseUrl($projectFile);

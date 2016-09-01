@@ -35,31 +35,19 @@ class ProjectFileController extends Controller
         }
     }
     
-    public function update(Request $request, $fileId){
-    	if($this->service->checkOwnerId($fileId) == false){
-    		return ['error' => true, 'message' => 'Access forbidden'];
-    	}
+    public function update($projectId, $fileId, Request $request){
     	return $this->service->update($request->all(), $fileId);
     }
     
-    public function show($fileId){
-        if(!$this->service->projectViewPermission($fileId)){
-            return ['error' => true, 'message' => 'Access forbidden'];
-        }
+    public function show($projectId, $fileId){
         return $this->service->find($fileId);
     }
     
     public function destroy($projectId, $fileId){
-        if(!$this->service->checkOwnerId($fileId)){
-            return ['error' => true, 'message' => 'Access forbidden'];
-        }
         return $this->service->deleteFile($projectId, $fileId);
     }
     
-    public function showFile($fileId){
-    	if(!$this->service->projectViewPermission($fileId)){
-    		return ['error' => true, 'message' => 'Access forbidden'];
-    	}
+    public function showFile($projectId, $fileId){
     	
     	$filePath		= $this->service->getFilePath($fileId);
     	$fileContent	= file_get_contents($filePath);
