@@ -23,7 +23,7 @@ class CheckProjectOwner
 	 */
     public function handle($request, Closure $next)
     {
-    	$projectId = isset($request->route('id')) ? $request->route('id') : $request->route('project');
+    	$projectId = $request->route('id') ? $request->route('id') : $request->route('project');
     	
     	if(!$this->service->checkOwnerId($projectId)){
     		return ['error' => true, 'message' => 'Access forbidden'];

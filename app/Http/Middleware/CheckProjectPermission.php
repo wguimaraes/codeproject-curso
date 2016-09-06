@@ -24,7 +24,7 @@ class CheckProjectPermission
     public function handle($request, Closure $next)
     {
     	
-    	$projectId = isset($request->route('id')) ? $request->route('id') : $request->route('project');
+    	$projectId = $request->route('id') ? $request->route('id') : $request->route('project');
     	 
     	if(!$this->service->projectViewPermission($projectId)){
     		return ['error' => true, 'message' => 'Access forbidden'];

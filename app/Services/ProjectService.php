@@ -43,7 +43,8 @@ class ProjectService {
     }
     
     public function findWhere(){
-    	return $this->repository->findWhere(['owner_id' => $this->userId]);
+    	//return $this->repository->findWhere(['owner_id' => $this->userId]);
+    	return $this->repository->findWithOwnerAndMember($this->userId);
     }
     
     public function create(array $data){
@@ -149,7 +150,7 @@ class ProjectService {
     }
     
     public function projectViewPermission($id){
-    	if($this->service->checkOwnerId($id) || $this->service->checkProjectMember($id)){
+    	if($this->checkOwnerId($id) || $this->checkProjectMember($id)){
     		return true;
     	}else{
     		return false;
